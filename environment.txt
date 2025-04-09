@@ -1,0 +1,7 @@
+torch
+torchvision
+torchaudio
+pytorch-lightning
+hydra-core
+hydra-utils
+scikit-learn

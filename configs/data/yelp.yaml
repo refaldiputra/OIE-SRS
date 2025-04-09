@@ -1,0 +1,10 @@
+_target_: data.yelp_datamodule.YelpDataModule
+batch_size: 256
+num_workers: 8
+pin_memory: True
+seq_dic_conf:
+  data_dir: ${paths.data_dir} # should go to data directory
+  data_name: Yelp # name of the dataset
+others:
+  max_seq_length: 20
+  model_type: SASRec

@@ -1,0 +1,11 @@
+_target_: data.yelp_seq_datamodule.YelpSeqDataModule
+batch_size: 256
+num_workers: 0
+pin_memory: False
+seq_dic_conf:
+  data_dir: ${paths.data_dir} # should go to data directory
+  data_name: Yelp_seq # name of the dataset
+others:
+  max_seq_length: 20
+  model_type: SASRec
+  mode: front # the options are default, back and front

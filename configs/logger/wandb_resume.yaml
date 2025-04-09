@@ -1,0 +1,14 @@
+wandb:
+  _target_: lightning.pytorch.loggers.wandb.WandbLogger
+  save_dir: ${paths.output_dir}
+  offline: false
+  anonymous: null
+  project: recsys
+  log_model: false
+  prefix: ''
+  group: sasrec
+  entity: null
+  tags: []
+  job_type: ''
+  id: null
+  resume: must

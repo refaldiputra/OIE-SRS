@@ -1,0 +1,1 @@
+This folder is used to store the snapshots of item embeddings via configs `save_item_embeddings=True`
