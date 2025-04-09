@@ -34,7 +34,11 @@ After that the checkpoints will appear in `./logs/train/` where the best checkpo
 Then, one can use the checkpoint for the fine-tuning stage with following:
 
 ```
-python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to checkpoint>
+# for whole models (o)
+python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to checkpoint> oie_learning=True
+
+# for only item embedding (z)
+python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to checkpoint> oie_learning=True item=True
 ```
 
 # Misc
