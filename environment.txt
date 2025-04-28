@@ -1,7 +1,9 @@
 torch
 torchvision
 torchaudio
-pytorch-lightning
+lightning
 hydra-core
-hydra-utils
+hydra-colorlog
 scikit-learn
+rich
+wandb
