@@ -28,7 +28,7 @@ If one wants to train the model according to our method, first, we can use the o
 ```
 cd src
 
-python train.py data=lastfm_oie model=sasrec trainer.accelerator=gpu
+python train.py data=lastfm_oie model=sasrec trainer.accelerator=gpu trainer.max_epochs=10
 ```
 
 After that, the checkpoints will appear in `./logs/train/` where the best checkpoint is labelled by its epoch
@@ -37,7 +37,7 @@ Then, one can use the checkpoint for the fine-tuning stage with the following:
 
 ```
 # for whole models (o)
-python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm checkpoint> oie_learning=True
+python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm_oie checkpoint> oie_learning=True
 
 # for only item embedding (z)
 python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm checkpoint> oie_learning=True item=True
