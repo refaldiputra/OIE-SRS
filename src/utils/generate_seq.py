@@ -94,7 +94,7 @@ def main():
     print('generating')
     # find the maximum item_ids in the reference data set, e.g. Beauty.txt
     name = 'LastFM'
-    path_reference = '/home/jovyan/shared/refaldi/llm_id_recsys/data/'+name+'.txt'
+    path_reference = #path to data
     _,max_ids,_ = get_user_seqs(path_reference)
     print(max_ids)
     # num sample
@@ -103,7 +103,7 @@ def main():
     data_seq = create_data(max_ids+1, 20)
     # generate the data for file
     for_file = generate_data(num_sample,data_seq)
-    path_seq = '/home/jovyan/shared/refaldi/llm_id_recsys/data/'+name+'_seq.txt'
+    path_seq = #path to data seq
     
     #create_file(for_file, path_seq)
     print('done, the file is saved to', path_seq)
