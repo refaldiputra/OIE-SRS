@@ -7,3 +7,4 @@ hydra-colorlog
 scikit-learn
 rich
 wandb
+rootutils
