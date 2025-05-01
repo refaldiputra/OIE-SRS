@@ -38,8 +38,11 @@ from src.utils import (
     instantiate_loggers,
     log_hyperparameters,
     task_wrapper,
+    item_part,
 )
 
+
+wandb.login(key='a0c6d8a4a5a10e28e40d0086c3a2ff2103cad502')
 log = RankedLogger(__name__, rank_zero_only=True)
 
 
@@ -73,6 +76,7 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
     log.info("Instantiating callbacks...")
     callbacks: List[Callback] = instantiate_callbacks(cfg.get("callbacks"))
+    print('Printing the callbacks:' , callbacks)
 
     log.info("Instantiating loggers...")
     logger: List[Logger] = instantiate_loggers(cfg.get("logger"))
@@ -92,8 +96,29 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     if logger:
         log.info("Logging hyperparameters!")
         log_hyperparameters(object_dict)
+    # data.others.model_type=Bert4Rec
+    # log.info(f"The model is {cfg.data.others.model_type}")
+    
+    if cfg.get("oie_learning") and cfg.get("ckpt_path") is not None:
+        log.info("Starting training using ordered item embedding!")
+        if cfg.get("item"):
+            log.info('Using the item embeddings')
+            from models.seqrec_module import SeqRecLitModule
+            checkpoint = cfg.get("ckpt_path")
+            model_pt = SeqRecLitModule.load_from_checkpoint(checkpoint)
+            model_dict_pt = model_pt.state_dict()
+            key = 'net.item_embeddings.weight'
+            embedding_dict = {k: v for k, v in model_dict_pt.items() if k in key}
+            model.load_state_dict(embedding_dict, strict=False) # we can also use nn.Embeddings.from_pretrained()
+            if cfg.get("item_freeze"):
+                model.net.item_embeddings.requires_grad_(False) # freeze the item
+            log.info('Training with only the item embeddings')
+            trainer.fit(model=model, datamodule=datamodule)
+        else:
+            log.info("Training with the whole models")
+            trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path")) 
 
-    if cfg.get("train"):
+    if cfg.get("train") and not cfg.get("oie_learning"):
         log.info("Starting training!")
         trainer.fit(model=model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
 
