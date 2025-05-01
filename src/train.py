@@ -40,8 +40,6 @@ from src.utils import (
     task_wrapper,
 )
 
-
-wandb.login(key='a0c6d8a4a5a10e28e40d0086c3a2ff2103cad502')
 log = RankedLogger(__name__, rank_zero_only=True)
 
 
