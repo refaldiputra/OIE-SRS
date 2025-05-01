@@ -23,7 +23,7 @@ python eval.py ckpt_path=<path to lastfm checkpoint> data=lastfm model=sasrec
 
 # Training
 
-If one wants to train the model according to our method, first, we can use the ordered synthetic data set to induce OIE in the pre-training stage.
+If one wants to train the model according to our method, first, we can use the ordered synthetic dataset to induce OIE in the pre-training stage.
 
 ```
 cd src
@@ -31,7 +31,7 @@ cd src
 python train.py data=lastfm_oie model=sasrec trainer.accelerator=gpu trainer.max_epochs=10
 ```
 
-After that, the checkpoints will appear in `./logs/train/` where the best checkpoint is labelled by its epoch
+After that, the checkpoints will appear in `./logs/train/<model>/<data_seq>` where you can use the `last.ckpt'
 
 Then, one can use the checkpoint for the fine-tuning stage with the following:
 
@@ -43,9 +43,13 @@ python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <pat
 python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm checkpoint> oie_learning=True item=True
 ```
 
+Later, the new checkpoints will appear in `./logs/train/<model>/<data>`, which one can use for the evaluation.
 # Misc
 
 We also put the figure production in the notebooks inside the `src` folder.
+
+Some potential issues: 
+- During training, there might be a problem with metric calculation; a potential cause is the location of the tensor. One can fix this by replacing `detach()` to `cpu()` at lines 50,51,78,79 of `src/utils/metrics.py`.
 
 # Acknowledgment
 
