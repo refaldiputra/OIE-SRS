@@ -20,6 +20,10 @@ cd src
 python eval.py ckpt_path=<path to lastfm checkpoint> data=lastfm model=sasrec
 
 ```
+The options for the data argument are `lastfm`, `ml`, `beauty`, `yelp`
+
+The options for the model argument are `sasrec`, `bert4rec`, `bsarec`
+
 
 # Training
 
@@ -31,7 +35,7 @@ cd src
 python train.py data=lastfm_oie model=sasrec trainer.accelerator=gpu trainer.max_epochs=10
 ```
 
-After that, the checkpoints will appear in `./logs/train/<model>/<data_seq>` where you can use the `last.ckpt'
+After that, the checkpoints will appear in `./logs/train/<model>/<data_seq>` where you can use the `last.ckpt`
 
 Then, one can use the checkpoint for the fine-tuning stage with the following:
 
@@ -40,10 +44,12 @@ Then, one can use the checkpoint for the fine-tuning stage with the following:
 python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm_oie checkpoint> oie_learning=True
 
 # for only item embedding (z)
-python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm checkpoint> oie_learning=True item=True
+python train.py data=lastfm model=sasrec trainer.accelerator=gpu ckpt_path= <path to lastfm_oie checkpoint> oie_learning=True item=True
 ```
 
 Later, the new checkpoints will appear in `./logs/train/<model>/<data>`, which one can use for the evaluation.
+
+As like the evaluation, for the other data sets and models, one need to specify the arguments.
 # Misc
 
 We also put the figure production in the notebooks inside the `src` folder.
