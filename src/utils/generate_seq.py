@@ -5,22 +5,19 @@ import random
 
 
 def create_data(max_, max_per_user):
-    number_user = max_ // max_per_user
+    number_user = max_ // max_per_user # create the base user
     data = []
     user = []
     data_irr = []
-    user_irr = []
+    # this loop will get up to the base user where they have the same number of items
     for i in range(number_user):
         data.append(list(range(i*max_per_user+1, (i+1)*max_per_user+1)))
         user.append([i+1])
-    data_seq = list(np.column_stack((user, data)))
+    # this is for the rest of the items that are not divisible by max_per_user
     if number_user%max_per_user != 0:
         data_irr.append(list(range(number_user*max_per_user+1, max_+1)))
     # concatenate the irregular data
-    #data_irr = list(np.column_stack((user_irr, data_irr)))
-    data_seq = data_seq + data_irr
     data = data + data_irr
-
     return data #data_seq
 
 def create_file(data_seq, path):
@@ -41,38 +38,28 @@ def pick_rand(b, a=1):
 def generate_data(num_sample,data_seq:List):
     new_data = []
     data_seq_init = data_seq[:] # copy the value by slicing
-    for m in range(len(data_seq_init)): # this loop is for the ordered sequences
+    # this loop is for the ordered sequences
+    for m in range(len(data_seq_init)): 
         data_to_insert = list(data_seq_init[m])
         data_to_insert.insert(0,m+1)
         new_data.append(data_to_insert)
-    for n in range(num_sample-len(data_seq_init)): # this loop is for random sequences
-        #get a list in the sequence
+    # this loop is for random sequences
+    for n in range(num_sample-len(data_seq_init)): 
+        # get a list in the sequence
         x_rand = random.randint(0,len(data_seq)-1)
-        seq = data_seq[x_rand]
-        # generate random two points
-        if len(seq)!=1:
+        seq = data_seq[x_rand] # choosing a random sequence
+        # generate random two points as the start and end of the sequence
+        if len(seq)>2:
             points = pick_rand(len(seq))
-        else: # this is the case when the sequence is only 1.
-            points = [0,1]
+        else: # this is the case when the sequence is less than 3.
+            points = list(range(len(seq)+1))
         # append data and index
         seq_filtered = list(seq[points[0]:points[1]])
         seq_filtered.insert(0,n+1+len(data_seq)) # inserting the user_id
         new_data.append(seq_filtered)
     return new_data
 
-# find the maximum integer value from the data path
-def get_max(path):
-    max_ = 0
-    with open(path, 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            str_ = line.split(' ')
-            str_ = [int(i) for i in str_]
-            if max(str_) > max_:
-                max_ = max(str_)
-
-    return max_
-# comes from the original code
+# get the information from the file
 def get_user_seqs(data_file):
     lines = open(data_file).readlines()
     user_seq = []
@@ -88,25 +75,28 @@ def get_user_seqs(data_file):
 
     return user_seq, max_item, num_users
 
-
-
 def main():
     print('generating')
     # find the maximum item_ids in the reference data set, e.g. Beauty.txt
     name = 'LastFM'
-    path_reference = #path to data
+    path_reference = #path to data .txt
     _,max_ids,_ = get_user_seqs(path_reference)
-    print(max_ids)
+    print(f"The item size of this dataset is: {max_ids}")
     # num sample
     num_sample = 25000
     # create the sequence where the maximum per user is 20
-    data_seq = create_data(max_ids+1, 20)
+    data_seq = create_data(max_ids, 20)
+    # print('data_seq:', data_seq)
     # generate the data for file
     for_file = generate_data(num_sample,data_seq)
-    path_seq = #path to data seq
-    
-    #create_file(for_file, path_seq)
+    path_seq = #path to new data .txt
+
+    create_file(for_file, path_seq)
     print('done, the file is saved to', path_seq)
+
+    # checking again
+    _,max_ids,_ = get_user_seqs(path_seq)
+    print(f"The item size of this dataset is: {max_ids}")
 
 if __name__ == "__main__":
     main()
