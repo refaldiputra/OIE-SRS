@@ -14,7 +14,7 @@ def create_data(max_, max_per_user):
         data.append(list(range(i*max_per_user+1, (i+1)*max_per_user+1)))
         user.append([i+1])
     # this is for the rest of the items that are not divisible by max_per_user
-    if number_user%max_per_user != 0:
+    if max_%max_per_user != 0: #previously there was some bugs
         data_irr.append(list(range(number_user*max_per_user+1, max_+1)))
     # concatenate the irregular data
     data = data + data_irr
