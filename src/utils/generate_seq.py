@@ -5,17 +5,17 @@ import random
 
 
 def create_data(max_, max_per_user):
-    number_user = max_ // max_per_user # create the base user
+    reg_num = max_ // max_per_user # create the base user
     data = []
     user = []
     data_irr = []
     # this loop will get up to the base user where they have the same number of items
-    for i in range(number_user):
+    for i in range(reg_num):
         data.append(list(range(i*max_per_user+1, (i+1)*max_per_user+1)))
         user.append([i+1])
     # this is for the rest of the items that are not divisible by max_per_user
-    if max_%max_per_user != 0: #previously there was some bugs
-        data_irr.append(list(range(number_user*max_per_user+1, max_+1)))
+    if max_%max_per_user != 0: #previously there was a bug
+        data_irr.append(list(range(reg_num*max_per_user+1, max_+1)))
     # concatenate the irregular data
     data = data + data_irr
     return data #data_seq
